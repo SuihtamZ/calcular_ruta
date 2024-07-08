@@ -61,26 +61,27 @@ def a_estrella(matriz, inicio, fin):
     tamano = len(matriz)
     # Movimientos en las ocho direcciones posibles (incluyendo diagonales)
     movimientos = [(0, 1), (1, 0), (0, -1), (-1, 0), (1, 1), (-1, -1), (1, -1), (-1, 1)]
+    #Inicializamos la lista de nodos a explorar
     open_set = []
     heapq.heappush(open_set, (0, inicio))
-    came_from = {}
+    came_from = {} #Diccionario para almcenar nodos y sus padres
     g_score = {inicio: 0}
     f_score = {inicio: heuristica(inicio, fin)}
     
     while open_set:
         _, current = heapq.heappop(open_set)
         
-        if current == fin:
+        if current == fin: #Reconstruimos el camino
             path = []
             while current in came_from:
                 path.append(current)
                 current = came_from[current]
             path.append(inicio)  # Agregar el inicio al final del camino
-            return path[::-1]
+            return path[::-1] #Retornamos el camino ya ordenado
         
-        for movimiento in movimientos:
+        for movimiento in movimientos: #Exploramos los vecinos
             vecino = (current[0] + movimiento[0], current[1] + movimiento[1])
-            if 0 <= vecino[0] < tamano and 0 <= vecino[1] < tamano:
+            if 0 <= vecino[0] < tamano and 0 <= vecino[1] < tamano: #Verificamos que el vecino este dentro de la matriz
                 if matriz[vecino[0]][vecino[1]] == "#":
                     continue
                 tent_g_score = g_score[current] + heuristica(current, vecino)
